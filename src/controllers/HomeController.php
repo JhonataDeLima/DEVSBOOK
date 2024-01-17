@@ -2,19 +2,26 @@
 namespace src\controllers;
 
 use \core\Controller;
+use \src\handlers\LoginHandler;
 
 class HomeController extends Controller {
 
-    private $loggedUser;
+    protected $loggedUser;
 
-   /* public function __construct(){
-        $this->redirect('/login');
-    } */
+    public function __construct(){
 
-    public function index() {
-        $this->render('home', ['nome' => 'Bonieky']);
+        $this->loggedUser = LoginHandler::checkLogin();
+        if(LoginHandler::checkLogin() === false){
+            $this->redirect('/login');
+        }
+        
     }
 
+    public function index() {
 
+        $this->render('home', [
+            'loggedUser' => $this->loggedUser
+        ]);
+    }
 
 }
